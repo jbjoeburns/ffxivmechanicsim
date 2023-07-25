@@ -14,6 +14,8 @@ const Caloric = () => {
     const [prevPos, setPrevPos] = useState("");
     // list of debuffs to randomise
     const [debuffs] = useState(["beacon", "fire", "fire", "wind"]);
+    // tracks who is at what position for movement 3
+    const [posTaken] = useState({"A" : "", "B" : "", "C" : "", "D" : "", "1" : "", "2" : "", "N" : "", "S" : ""});
     // debuffs each group member has; object
     const [groupStatus, setGroupStatus] = useState([]);
     // timer, counts down from 12
@@ -76,164 +78,27 @@ const Caloric = () => {
         console.log("player went to ", value)
 
         // checks if movement was correct, for initial movements
-        if (movementNumber === 1) {
-            if (groupStatus[location.state.selectedRole] === "beacon") {
-                if (value === "D" && playerIndex < 4 || value === "B" && playerIndex > 3){
-                    console.log("liv")
-                    setMovementNumber(2)
-                    setPrevPos(value)
-                }
-                else {
-                    console.log("ded")
-                    setFailCheck(!failCheck)
-                    setOpen(!open)
-                }
-            }
-            else if (groupStatus[partner] === "beacon") {
-                if (value === "C" && playerIndex < 4 || value === "A" && playerIndex > 3){
-                    console.log("liv")
-                    setMovementNumber(2)
-                    setPrevPos(value)
-                }
-                else {
-                    console.log("ded")
-                    setFailCheck(!failCheck)
-                    setOpen(!open)
-                }
-            }
-            else if (value === "M") {
-                console.log("liv")
-                setMovementNumber(2)
-                setPrevPos(value)
-            }
-        }
-
-        // checks if movement was correct, for second movements
-        if (movementNumber === 2) {
-            if (groupStatus[location.state.selectedRole] === "beacon") {
-                if (prevPos === "D" && value === "1") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else if (prevPos === "B" && value === "2") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else {
-                    console.log("ded")
-                    setFailCheck(!failCheck)
-                    setOpen(!open)
-                }
-            }
-            if (groupStatus[location.state.selectedRole] === "wind") {
-                if (prevPos === "M") {
-                    // basically want to check if group 1 (go either D or C) or group 2 (A or B)
-                    // then check if opposite debuff is on position they went to
-                    // could do this by checking each even index (grp1)/odd index (grp2) for fire
-                    // if group 1 go C, if group 2 go A
-// NEED TO ADD MOVEMENT 3 SPECIFICALLY FOR M WIND PLAYERS
-                    //if group 1
-                    if(playerIndex % 2 === 0 && value === "C") {
-                        console.log("liv")
-                        setMovementNumber(3)
-                        setPrevPos(value)
-                    }
-                    //if group 2
-                    else if(playerIndex % 2 !== 0 && value === "A") {
-                        console.log("liv")
-                        setMovementNumber(3)
-                        setPrevPos(value)
-                    }
-                    else {
-                        console.log("ded")
-                        setFailCheck(!failCheck)
-                        setOpen(!open)
-                    }
-                }
-                else if (prevPos === "C" && value === "S") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else if (prevPos === "A" && value === "N") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else {
-                    console.log("ded")
-                    setFailCheck(!failCheck)
-                    setOpen(!open)
-                }
-            }
-            if (groupStatus[location.state.selectedRole] === "fire") {
-                if (prevPos === "M") {
-                    // same as fire but if group 1 go D, if group 1 go B
-                    //if group 1
-                    if(playerIndex % 2 === 0 && value === "D") {
-                        console.log("liv")
-                            setConsecutiveClears(consecutiveClears + 1)
-                            setWinCheck(true)
-                            setOpen(!open)
-                        }
-                        //if group 2
-                        else if(playerIndex % 2 !== 0 && value === "B") {
-                            console.log("liv")
-                            setConsecutiveClears(consecutiveClears + 1)
-                            setWinCheck(true)
-                            setOpen(!open)
-                        }
-                        else {
-                        console.log("ded")
-                        setFailCheck(!failCheck)
-                        setOpen(!open)
-                        }
-                }
-                else if (prevPos === "C" && value === "D") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else if (prevPos === "A" && value === "B") {
-                    console.log("liv")
-                    setConsecutiveClears(consecutiveClears + 1)
-                    setWinCheck(true)
-                    setOpen(!open)
-                }
-                else {
-                    console.log("ded")
-                    setFailCheck(!failCheck)
-                    setOpen(!open)
-                }
-            } 
-        }
-        if (movementNumber === 3) {
-            if (prevPos === "C" && value === "S") {
-                console.log("liv")
-                setConsecutiveClears(consecutiveClears + 1)
-                setWinCheck(true)
-                setOpen(!open)
-            }
-            else if (prevPos === "A" && value === "N") {
-                console.log("liv")
-                setConsecutiveClears(consecutiveClears + 1)
-                setWinCheck(true)
-                setOpen(!open)
-            }
-            else {
-                console.log("ded")
-                setFailCheck(!failCheck)
-                setOpen(!open)
-            }
-        }
     }
+
+    // new plan: track each players expected movements by iterating through the list of player positions
+
+    // initial movements: find beacon player, then determine it's group
+    // then add +1 or -1 depending on G1 or G2 to determine partner
+    // rest go mid
+
+    // movement 2: group 1 needs to go to opposite debuff going CCW starting D
+    // so iterate through the positions list to find people at mid
+    // then for each mid person in group 1, check their debuff then iterate through the positions list to find debuff of D, C, B in that order
+    // first a non-matching debuff is found, place that player at that position and move onto the other group 1 member (skipping position first member took)
+    // repeat for group 2 but CW starting A (A, B, C)
+
+    // movement 3: winds go out, fires go CC or CCW
+    // overwrite all fires with either no-debuff, or re-fire (only 2 re-fires max)
+    // process wind movement first (A -> N, B - > 2, C -> S, D -> 1)
+    // for person at C, check if person remaining at D has the same debuff as you
+    // if so, go CC, if not go CC
+    // same thing for person at A but for person at B instead
+
     return (
         <div className = "container">
             {open ?
