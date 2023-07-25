@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/ffxivmechanicsim/static/css/main.9e3eca4f.css",
+    "main.js": "/ffxivmechanicsim/static/js/main.5e9036b6.js",
+    "static/js/787.064325ab.chunk.js": "/ffxivmechanicsim/static/js/787.064325ab.chunk.js",
+    "static/media/background.png": "/ffxivmechanicsim/static/media/background.05dc81274e4492c177e2.png",
+    "index.html": "/ffxivmechanicsim/index.html",
+    "main.9e3eca4f.css.map": "/ffxivmechanicsim/static/css/main.9e3eca4f.css.map",
+    "main.5e9036b6.js.map": "/ffxivmechanicsim/static/js/main.5e9036b6.js.map",
+    "787.064325ab.chunk.js.map": "/ffxivmechanicsim/static/js/787.064325ab.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9e3eca4f.css",
+    "static/js/main.5e9036b6.js"
+  ]
+}
