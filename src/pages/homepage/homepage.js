@@ -11,14 +11,18 @@ const Homepage = () => {
   };
   return (
     <div className="backgroundVid">
-      <div className="hex"></div>
-      <div className="startContainer">
-        {open ?
-          <Menu/>
-        :
-          <button onClick={handleStart}>START</button>
-        }
-      </div>
+      <div className="elementContainer"></div>
+        <div className="startContainer">
+          {open ?
+            <Menu/>
+          :
+          <>
+            <button className="startButton" onClick={handleStart}>START</button>
+            <button className="startButton" onClick={handleStart}>START</button>
+            <button className="startButton" onClick={handleStart}>START</button>
+          </>
+          }
+        </div>
     </div>
   );
 };

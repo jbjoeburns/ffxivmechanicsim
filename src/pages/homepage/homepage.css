@@ -1,7 +1,7 @@
 body {
   background-color: #222;
   animation-name: color;
-  animation-duration: 2s;
+  animation-duration: 6s;
   animation-iteration-count: infinite;
 }
 
@@ -10,7 +10,7 @@ body {
     background-color: #222;
   }
   50% {
-    background-color: #798eb0;
+    background-color: rgb(255, 255, 255)
   }
   100% {
     background-color: #222;
@@ -19,13 +19,11 @@ body {
 
 .backgroundVid {
   height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100vw;
   background-image: url("../../images/background.png");
+  background-color: #4141415e;
   background-repeat: repeat;
-  animation: backgroundAnim 2s linear infinite;
+  animation: backgroundAnim 10s linear infinite;
 }
 
 @keyframes backgroundAnim
@@ -37,5 +35,81 @@ body {
   100%
   {
     background-position: 500px 0;
+  }
+}
+
+.startContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
+.startButton {
+  margin-top: 50vh;
+  position: absolute;
+  background:none;
+  border:none;
+  margin:0;
+  padding:0;
+  opacity: 50%;
+  cursor: pointer;
+  font-size: 15vw;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: rgb(50, 50, 50);
+  text-shadow:
+    0 0 2px white,
+    0 0 4px white,
+    0 0 8px white,
+    0 0 12px rgb(208, 255, 255),
+    0 0 16px rgb(208, 255, 255),
+    0 0 20px rgb(208, 255, 255),
+    0 0 24px rgb(208, 255, 255),
+    0 0 28px rgb(208, 255, 255);
+  animation: glitchEffect 7000ms infinite;
+}
+
+.startButton:first-child {
+  animation: glitchEffect 9000ms infinite;
+}
+
+.startButton:last-child {
+  animation: glitchEffect 11000ms infinite;
+}
+
+@keyframes glitchEffect {
+  2% {
+    margin-top: 5vh;
+    margin-left: 0vh; 
+  }
+  3% {
+    margin-top: 0vh;
+    margin-left: 0vh; 
+  }
+  31% {
+    margin-top: 0vh;
+    margin-left: 0vh; 
+  }
+  32% {
+    margin-top: 0vh;
+    margin-left: 2vh; 
+  }
+  33% {
+    margin-top: 0vh;
+    margin-left: 0vh; 
+  }
+  75% {
+    margin-top: 0vh;
+    margin-left: 0vh; 
+  }
+  76% {
+    margin-top: 3vh;
+    margin-left: 5vh; 
+  }
+  77% {
+    margin-top: 0vh;
+    margin-left: 0vh; 
   }
 }
