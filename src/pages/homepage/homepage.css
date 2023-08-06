@@ -1,5 +1,41 @@
-.container {
+body {
+  background-color: #222;
+  animation-name: color;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes color {
+  0% {
+    background-color: #222;
+  }
+  50% {
+    background-color: #798eb0;
+  }
+  100% {
+    background-color: #222;
+  }
+}
+
+.backgroundVid {
+  height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url("../../images/background.png");
+  background-repeat: repeat;
+  animation: backgroundAnim 2s linear infinite;
+}
+
+@keyframes backgroundAnim
+{
+  0%
+  {
+    background-position: 0 0;
+  }
+  100%
+  {
+    background-position: 500px 0;
+  }
 }
