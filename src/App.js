@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import './App.css';
-import Homepage from './pages/homepage/homepage';
+import Homepage from './pages/Homepage';
 import Caloric from './pages/caloric/caloric';
 
 const App = () => {

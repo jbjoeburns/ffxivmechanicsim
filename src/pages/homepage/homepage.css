@@ -1,8 +1,21 @@
+
 body {
   background-color: #222;
   animation-name: color;
   animation-duration: 6s;
   animation-iteration-count: infinite;
+  
+}
+
+.backdrop {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #000000c0;
+  display: flex;
+  justify-content: center;
 }
 
 @keyframes color {
@@ -112,4 +125,106 @@ body {
     margin-top: 0vh;
     margin-left: 0vh; 
   }
+}
+
+.modal {
+  margin: auto;
+  align-items: left;
+  background-color: rgba(240, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 
+    0 0 2px white,
+    0 0 4px white,
+    0 0 8px white,
+    0 0 12px rgb(208, 255, 255),
+    0 0 16px rgb(208, 255, 255),
+    0 0 20px rgb(208, 255, 255),
+    0 0 24px rgb(208, 255, 255),
+    0 0 28px rgb(208, 255, 255);
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: rgb(50, 50, 50);
+  width: 100%;
+  height: 50px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: rgb(50, 50, 50);
+  text-shadow:
+    0 0 1px white,
+    0 0 2px white,
+    0 0 4px white,
+    0 0 6px rgb(208, 255, 255),
+    0 0 8px rgb(208, 255, 255);
+  text-align: center;
+}
+
+.topbar p {
+  margin-left: 2%;
+}
+
+.topbar button {
+  margin: 9px 9px 0% 0%;
+  background-color: rgb(99, 99, 99);
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+}
+
+.topbar button div {
+  margin: 0.5px 0% 0% -2.5px;
+  width: 125%;
+  height: 20px;
+  background-color: rgba(240, 255, 255);
+  border-radius: 100%;
+  color: rgb(255, 0, 0);
+}
+
+.topbar button div:active {
+  height: 3px;
+  color: rgba(50, 50, 50, 0);
+}
+
+.modal form {
+  margin-top: 7vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal form select {
+  width: 30vw;
+  min-width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: outset;
+  background-color: #222;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1em;
+  color: rgb(255, 255, 255);
+  box-shadow:
+    0 0 1px white,
+    0 0 2px white,
+    0 0 4px white,
+    0 0 6px rgb(208, 255, 255),
+    0 0 8px rgb(208, 255, 255);
+  text-align: center;
+}
+
+.formText {
+  margin-top: 3vh;
+  margin-left: -15px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1.8em;
+}
+
+.modal form input {
+  border-radius: 5px;
+  border: outset;
+  margin-left: -15px;
 }
