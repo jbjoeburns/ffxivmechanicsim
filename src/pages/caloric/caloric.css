@@ -1,6 +1,42 @@
 .container {
     display: flex;
     flex-direction: row;
+    background-color: rgb(94, 94, 94);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.infobox {
+    background-color: rgb(249, 134, 134);
+    margin: 20px;
+    padding: 10px;
+    display: flex;
+    width: 30%;
+    justify-content: center;
+}
+
+.mapContainer {
+    background-color: rgb(134, 234, 249);
+    margin: 20px;
+    padding: 10px;
+    width: 70%;
+}
+
+.map {
+    height: 55vh;
+    width: 66vw;
+    border: inset;
+    margin-top: 25%;
+}
+
+.mapFloor{
+    border-bottom: 50vh solid red;
+    border-left: 10.5vw solid transparent;
+    border-right: 11vw solid transparent;
+    height: 0;
+    justify-content: center;
+    
 }
 
 .background {

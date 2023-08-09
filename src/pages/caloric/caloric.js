@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import {useLocation} from 'react-router-dom';
 import "./caloric.css";
+import { motion, AnimatePresence } from "framer-motion"
 
 const Caloric = () => {
     // takes info from homepage
@@ -101,56 +102,83 @@ const Caloric = () => {
 
     return (
         <div className = "container">
-            {open ?
-                <>
-                <div>{location.state.selectedMechanic} sim! Click start!</div>
-                {failCheck ?
-                    <b>
-                        LOL u died XD
-                    </b>
-                        : 
-                    <>
-                        {winCheck ? 
-                            <b>
-                                omg U winned??
-                            </b> 
-                            :
-                            <></>
-                        }
-                    </>
-                }
-                <button onClick={() => handleStart()}>START</button>
-                </> 
-                :
-                <>
-                CLEARS: {consecutiveClears}
-                <br/>
-                MOVEMENT: {movementNumber}
-                <br/>
-                ROLE: {location.state.selectedRole}
-                <br/>
-                DEBUFFS: 
-                <br/>
-                {
-                    Object.entries(groupStatus).map( ([key, value]) => <>{key}: {value}<br></br></>)
-                }
-                <br/>
-                TIMER: {timer}
-                </>
-            }
-        <div className = "background">
-            <button class="btn1" value={"1"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnD" value={"D"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnMid" value={"M"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnB" value={"B"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btn2" value={"2"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnNorth" value={"N"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnSouth" value={"S"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnA" value={"A"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
-            <button class="btnC" value={"C"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+            <div className = "infobox">
+                <p>This is a description of what MECHANIC does. WIP. Embed video below. Stylise button pls.</p>
+                <motion.button 
+                    key="goButton" 
+                    style={{
+                        position: "absolute",
+                        display: "flex",
+                        bottom: "50px"
+                    }}
+                    whileHover={{scale:1.5}} 
+                    className="goButton" 
+                    onClick={handleStart}
+                >
+                GO!
+                </motion.button>
+            </div>
+            <div className = "mapContainer">
+                <p>map goes here, remove this text later</p>
+                <div className="map">
+                    <p>this is the actual map itself, markers move within this using maybe margins or something idk</p>
+                    <div className="mapFloor">map floor, place all mechanic markers/player icons here</div>
+                </div>
+            </div>
         </div>
-    </div>
   );
 };
 
 export default Caloric;
+
+{/* <div className = "container">
+<div className = "infobox"></div>
+    {open ?
+        <>
+        <div>{location.state.selectedMechanic} sim! Click start!</div>
+        {failCheck ?
+            <b>
+                LOL u died XD
+            </b>
+                : 
+            <>
+                {winCheck ? 
+                    <b>
+                        omg U winned??
+                    </b> 
+                    :
+                    <></>
+                }
+            </>
+        }
+        <button onClick={() => handleStart()}>START</button>
+        </> 
+        :
+        <>
+        CLEARS: {consecutiveClears}
+        <br/>
+        MOVEMENT: {movementNumber}
+        <br/>
+        ROLE: {location.state.selectedRole}
+        <br/>
+        DEBUFFS: 
+        <br/>
+        {
+            Object.entries(groupStatus).map( ([key, value]) => <>{key}: {value}<br></br></>)
+        }
+        <br/>
+        TIMER: {timer}
+        </>
+    }
+<div className = "background">
+    <button class="btn1" value={"1"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnD" value={"D"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnMid" value={"M"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnB" value={"B"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btn2" value={"2"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnNorth" value={"N"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnSouth" value={"S"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnA" value={"A"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+    <button class="btnC" value={"C"} onClick={(e) => handlePosition(e.target.value)}>HERE?</button>
+</div>
+</div> */}
