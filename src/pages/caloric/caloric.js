@@ -15,8 +15,10 @@ const Caloric = () => {
     const [prevPos, setPrevPos] = useState("");
     // list of debuffs to randomise
     const [debuffs] = useState(["beacon", "fire", "fire", "wind"]);
+    // list of markers
+    const [markers] = useState(["A", "B", "C", "D", "1", "2", "N", "S", "M"])
     // tracks who is at what position for movement 3
-    const [posTaken] = useState({"A" : "", "B" : "", "C" : "", "D" : "", "1" : "", "2" : "", "N" : "", "S" : ""});
+    const [posTaken, setPosTaken] = useState("");
     // debuffs each group member has; object
     const [groupStatus, setGroupStatus] = useState([]);
     // timer, counts down from 12
@@ -42,11 +44,13 @@ const Caloric = () => {
     setTimer(12)
     setMovementNumber(1)
     setPrevPos("")
+    setPosTaken({"MT" : "M", "OT" : "M", "H1" : "M", "H2" : "M", "M1" : "M", "M2" : "M", "R1" : "M", "R2" : "M"})
     // re-randomises and resets timer+counter+previous position hook once the mechanic is cleared
     }, [consecutiveClears, failCheck])
 
     // function to start the sim once the start button is pressed
     function handleStart () {
+        // this should reveal the debuffs
         console.log(groupStatus)
         setOpen(!open);
         setFailCheck(false)
@@ -78,7 +82,49 @@ const Caloric = () => {
         console.log("their partner is ", groupStatus[partner])
         console.log("player went to ", value)
 
-        // checks if movement was correct, for initial movements
+        // positions expected, not updated until movement is passed
+        let expectedPos = posTaken
+        let incrementNum = 0
+        //MOVEMENT 1, the beacons:
+        Object.keys(expectedPos).forEach(function eachKey(key) { 
+            
+            if (groupStatus[key] === "beacon") {
+                if (incrementNum < 4) {
+                    expectedPos[key] = "D"
+                    if (incrementNum % 2 == 0) {
+                        expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "C"
+                    }
+                    else {
+                        expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "C"
+                    }
+                }
+                else {
+                    expectedPos[key] = "B"
+                    if (incrementNum % 2 == 0) {
+                        expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "A"
+                    }
+                    else {
+                        expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "A"
+                    }
+                }
+            }
+            incrementNum++
+        });
+
+        // when refactoring, put this as a function and call it instead, code is reusable
+        if (expectedPos[location.state.selectedRole] === value) {
+            setPosTaken(expectedPos) 
+            setPrevPos("M")
+            setMovementNumber(2)
+        }
+        else {
+            setFailCheck(!failCheck)
+            alert("fail")
+        }
+
+        //MOVEMENT 2, MIDS GO TO OPPOSITE DEBUFFS:
+        // either iterate through the object twice, first to determine debuffs of DCBA then to set expected positions
+        // or BETTER, make an array of debuffs at DCBA in order, then iterate through object assigning positions appropriately 
     }
 
     // new plan: track each players expected movements by iterating through the list of player positions
@@ -103,7 +149,15 @@ const Caloric = () => {
     return (
         <div className = "container">
             <div className = "infobox">
-                <p>This is a description of what MECHANIC does. WIP. Embed video below. Stylise button pls.</p>
+                <p>This is a description of what MECHANIC does. WIP. Embed video below. </p>
+                <iframe 
+                    width="100%" 
+                    height="315" 
+                    src="https://www.youtube.com/embed/O3_V1DwPA1I?start=492" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen/>
                 <motion.button 
                     key="goButton" 
                     style={{
@@ -119,10 +173,27 @@ const Caloric = () => {
                 </motion.button>
             </div>
             <div className = "mapContainer">
-                <p>map goes here, remove this text later</p>
+                <div>map goes here, remove this text later. find something else to include here, like a description of what the movement is, for example; "Initial positions/beacon movement before debuffs are given", and maybe add a button for a hint. Movement: {movementNumber}, Positions:
+                    {
+                        Object.keys(posTaken).map((keyName) => {
+                            return(
+                                <div>{keyName}: {posTaken[keyName]}, {groupStatus[keyName]}</div>
+                            )
+                        })
+                    }
+                </div>
                 <div className="map">
-                    <p>this is the actual map itself, markers move within this using maybe margins or something idk</p>
-                    <div className="mapFloor">map floor, place all mechanic markers/player icons here</div>
+                    <div className="mapFloor">                    
+                    {markers.map((keyName) => {
+                        return (
+                            <button 
+                                className={"btn".concat(String(keyName))} 
+                                value={keyName} 
+                                onClick={(e) => handlePosition(e.target.value)}>
+                                {keyName}
+                            </button>
+                        )
+                    })} </div>
                 </div>
             </div>
         </div>

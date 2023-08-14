@@ -12,8 +12,10 @@
     margin: 20px;
     padding: 10px;
     display: flex;
+    flex-direction: column;
     width: 30%;
     justify-content: center;
+    min-width: 200px;
 }
 
 .mapContainer {
@@ -53,53 +55,56 @@
     background-size: cover;         /* Generic*/
 }
 
-.background button {
+.mapFloor button {
     height: 3vh;
     width: 3vw;
     position: absolute;
 }
 
-.background .btn1 {
-    margin-left: 9.5vw; 
-    margin-top: 15.4vw; 
+
+
+/* later put this in the JS and designate positions based on an array to increase modularity */
+.btn1 {
+    margin-left: 0%;
+    margin-top: 13%;
 }
 
-.background .btnD {
-    margin-left: 20vw; 
-    margin-top: 15.4vw; 
+.btnD {
+    margin-left: 10%;
+    margin-top: 13%;
 }
 
-.background .btnMid {
-    margin-left: 23.5vw; 
-    margin-top: 15.4vw; 
+.btnM {
+    margin-left: 20%;
+    margin-top: 13%;
 }
 
-.background .btnB {
-    margin-left: 27.5vw; 
-    margin-top: 15.4vw; 
+.btnB {
+    margin-left: 30%;
+    margin-top: 13%;
 }
 
-.background .btn2 {
-    margin-left: 38vw; 
-    margin-top: 15.4vw; 
+.btn2 {
+    margin-left: 40%;
+    margin-top: 13%;
 }
 
-.background .btnC {
-    margin-left: 23.5vw; 
-    margin-top: 19.4vw; 
+.btnC {
+    margin-left: 20%;
+    margin-top: 19%;
 }
 
-.background .btnA {
-    margin-left: 23.5vw; 
-    margin-top: 11.4vw; 
+.btnA {
+    margin-left: 20%;
+    margin-top: 7%;
 }
 
-.background .btnNorth {
-    margin-left: 23.5vw; 
-    margin-top: 3.4vw; 
+.btnN {
+    margin-left: 20%;
+    margin-top: 3%;
 }
 
-.background .btnSouth {
-    margin-left: 23.5vw; 
-    margin-top: 28.4vw; 
+.btnS {
+    margin-left: 20%;
+    margin-top: 23%;
 }
