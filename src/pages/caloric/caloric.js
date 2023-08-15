@@ -38,14 +38,14 @@ const Caloric = () => {
             let debuffs2 = debuffs.sort(() => Math.random() - 0.5)
             setGroupStatus(Object.assign(...location.state.roleList.map((k, i) =>({
                 [k]: debuffs1.concat(debuffs2)[i] }))))
-    };
-    randomiseDebuffs();
-    // sets timer and movement counter and empties previous position hook
-    setTimer(12)
-    setMovementNumber(1)
-    setPrevPos("")
-    setPosTaken({"MT" : "M", "OT" : "M", "H1" : "M", "H2" : "M", "M1" : "M", "M2" : "M", "R1" : "M", "R2" : "M"})
-    // re-randomises and resets timer+counter+previous position hook once the mechanic is cleared
+        };
+        randomiseDebuffs();
+        // sets timer and movement counter and empties previous position hook
+        setTimer(12)
+        setMovementNumber(1)
+        setPrevPos("")
+        setPosTaken({"MT" : "M", "OT" : "M", "H1" : "M", "H2" : "M", "M1" : "M", "M2" : "M", "R1" : "M", "R2" : "M"})
+        // re-randomises and resets timer+counter+previous position hook once the mechanic is cleared
     }, [consecutiveClears, failCheck])
 
     // function to start the sim once the start button is pressed
@@ -84,47 +84,97 @@ const Caloric = () => {
 
         // positions expected, not updated until movement is passed
         let expectedPos = posTaken
+        let ExpectedGroupStatus = groupStatus
         let incrementNum = 0
+        
         //MOVEMENT 1, the beacons:
-        Object.keys(expectedPos).forEach(function eachKey(key) { 
-            
-            if (groupStatus[key] === "beacon") {
-                if (incrementNum < 4) {
-                    expectedPos[key] = "D"
-                    if (incrementNum % 2 == 0) {
-                        expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "C"
+        if (movementNumber === 1) {
+            Object.keys(expectedPos).forEach(function eachKey(key) {     
+                if (groupStatus[key] === "beacon") {
+                    ExpectedGroupStatus[key] = "wind"
+                    if (incrementNum < 4) {
+                        expectedPos[key] = "D"
+                        if (incrementNum % 2 == 0) {
+                            expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "C"
+                        }
+                        else {
+                            expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "C"
+                        }
                     }
                     else {
-                        expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "C"
+                        expectedPos[key] = "B"
+                        if (incrementNum % 2 == 0) {
+                            expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "A"
+                        }
+                        else {
+                            expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "A"
+                        }
                     }
                 }
-                else {
-                    expectedPos[key] = "B"
+                incrementNum++
+            });
+        }
+        //MOVEMENT 2, MIDS GO TO OPPOSITE DEBUFFS:
+        // either iterate through the object twice, first to determine debuffs of DCBA then to set expected positions
+        // or BETTER, make an array of debuffs at DCBA in order, then iterate through object assigning positions appropriately 
+        let DCounter = 0
+        let BCounter = 0
+        let CCounter = 0
+        let ACounter = 0
+        if (movementNumber === 2) {
+            Object.keys(posTaken).forEach(function eachKey(key) {
+                if (posTaken[key] == "M") {
                     if (incrementNum % 2 == 0) {
-                        expectedPos[Object.keys(expectedPos)[incrementNum + 1]] = "A"
+                        // find a way to get debuff by position
+                        // assuming support prio
+                        if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "D")] != groupStatus[key] && DCounter === 0) {
+                            expectedPos[key] = "D"
+                            DCounter++
+                        }
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "C")] != groupStatus[key] && CCounter === 0) {
+                            expectedPos[key] = "C"
+                            CCounter++
+                        }
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "B")] != groupStatus[key] && BCounter === 0) {
+                            expectedPos[key] = "B"
+                            BCounter++
+                        }
+                        
                     }
                     else {
-                        expectedPos[Object.keys(expectedPos)[incrementNum - 1]] = "A"
+                        if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "A")] != groupStatus[key] && ACounter === 0) {
+                            expectedPos[key] = "A"
+                            ACounter++
+                        }
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "B")] != groupStatus[key] && BCounter === 0) {
+                            expectedPos[key] = "B"
+                            BCounter++
+                        }
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "C")] != groupStatus[key] && CCounter === 0) {
+                            expectedPos[key] = "C"
+                            CCounter++
+                        }
                     }
                 }
-            }
-            incrementNum++
-        });
+                incrementNum++
+            })
+        }
 
-        // when refactoring, put this as a function and call it instead, code is reusable
+
+
+
         if (expectedPos[location.state.selectedRole] === value) {
             setPosTaken(expectedPos) 
-            setPrevPos("M")
-            setMovementNumber(2)
+            setGroupStatus(ExpectedGroupStatus)
+            let movementNumberPlus = movementNumber + 1
+            setMovementNumber(movementNumberPlus++)
+            return
         }
         else {
             setFailCheck(!failCheck)
             alert("fail")
-        }
-
-        //MOVEMENT 2, MIDS GO TO OPPOSITE DEBUFFS:
-        // either iterate through the object twice, first to determine debuffs of DCBA then to set expected positions
-        // or BETTER, make an array of debuffs at DCBA in order, then iterate through object assigning positions appropriately 
+            return
+        }    
     }
 
     // new plan: track each players expected movements by iterating through the list of player positions
