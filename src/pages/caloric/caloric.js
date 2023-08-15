@@ -11,8 +11,6 @@ const Caloric = () => {
     const location = useLocation();
     // tracks which movement we're on
     const [movementNumber, setMovementNumber] = useState(1);
-    // tracks previous position
-    const [prevPos, setPrevPos] = useState("");
     // list of debuffs to randomise
     const [debuffs] = useState(["beacon", "fire", "fire", "wind"]);
     // list of markers
@@ -29,8 +27,6 @@ const Caloric = () => {
     const [open, setOpen] = useState(true)
     // checks if you failed, so useeffect can be triggered and debuffs re-randomised (toggles between true and false to do this)
     const [failCheck, setFailCheck] = useState(false)
-    // checks if you won
-    const [winCheck, setWinCheck] = useState(false)
     useEffect(() => {
         // function to randomise debuffs
         const randomiseDebuffs = async () => {
@@ -40,12 +36,11 @@ const Caloric = () => {
                 [k]: debuffs1.concat(debuffs2)[i] }))))
         };
         randomiseDebuffs();
-        // sets timer and movement counter and empties previous position hook
+        // sets timer and movement counter
         setTimer(12)
         setMovementNumber(1)
-        setPrevPos("")
         setPosTaken({"MT" : "M", "OT" : "M", "H1" : "M", "H2" : "M", "M1" : "M", "M2" : "M", "R1" : "M", "R2" : "M"})
-        // re-randomises and resets timer+counter+previous position hook once the mechanic is cleared
+        // re-randomises and resets timer+counter hook once the mechanic is cleared
     }, [consecutiveClears, failCheck])
 
     // function to start the sim once the start button is pressed
@@ -54,7 +49,6 @@ const Caloric = () => {
         console.log(groupStatus)
         setOpen(!open);
         setFailCheck(false)
-        setWinCheck(false)
         setConsecutiveClears(0)
     }
 
@@ -127,6 +121,7 @@ const Caloric = () => {
                     if (incrementNum % 2 == 0) {
                         // find a way to get debuff by position
                         // assuming support prio
+                        // this was causing a problem, testing fix
                         if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "D")] != groupStatus[key] && DCounter === 0) {
                             expectedPos[key] = "D"
                             DCounter++
@@ -139,7 +134,13 @@ const Caloric = () => {
                             expectedPos[key] = "B"
                             BCounter++
                         }
-                        
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "A")] != groupStatus[key] && ACounter === 0) {
+                            expectedPos[key] = "A"
+                            ACounter++
+                        }
+                        else {
+                            alert("encountering that strange issue, take note of positions for debug")
+                        }
                     }
                     else {
                         if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "A")] != groupStatus[key] && ACounter === 0) {
@@ -154,20 +155,87 @@ const Caloric = () => {
                             expectedPos[key] = "C"
                             CCounter++
                         }
+                        else if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "D")] != groupStatus[key] && DCounter === 0) {
+                            expectedPos[key] = "D"
+                            DCounter++
+                        }
+                        else {
+                            alert("encountering that strange issue, take note of positions for debug")
+                        }
                     }
                 }
                 incrementNum++
             })
+
+            // This block of code is to randomly remove 2 fires from the group in preperation for the next mechanic (not entirely random but irrelevant for purpose)
+            let attemptNumber = 0
+            let removedCount = 0
+            Object.keys(ExpectedGroupStatus).forEach(function eachKey(key) {
+                if (ExpectedGroupStatus[key] === "fire" && removedCount < 2) {
+                    if (attemptNumber > 1) {
+                        ExpectedGroupStatus[key] = "none"
+                        removedCount++
+                    }
+                    else if (Math.floor(Math.random() * 2) === 1) {
+                        ExpectedGroupStatus[key] = "none"
+                        removedCount++
+                    }
+                    else {
+                        attemptNumber++
+                    }
+                }
+            })
         }
 
+        // MOVEMENT 3, winds go out and A/C pair with opposite debuff, clockwise prio:
+        if (movementNumber === 3) {
+            Object.keys(posTaken).forEach(function eachKey(key) {
+                if (groupStatus[key] === "wind") {
+                    if (posTaken[key] === "D") {
+                        expectedPos[key] = "1"
+                    }
+                    if (posTaken[key] === "A") {
+                        expectedPos[key] = "N"
+                    }
+                    if (posTaken[key] === "B") {
+                        expectedPos[key] = "2"
+                    }
+                    if (posTaken[key] === "C") {
+                        expectedPos[key] = "S"
+                    }
+                }
+                else {
+                    if (posTaken[key] === "A") {
+                        if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "B")] != groupStatus[key]) {
+                            expectedPos[key] = "B"
+                        }
+                        else {
+                            expectedPos[key] = "D"
+                        }
+                    }
+                    if (posTaken[key] === "C") {
+                        if (groupStatus[Object.keys(posTaken).find(key => posTaken[key] === "D")] != groupStatus[key]) {
+                            expectedPos[key] = "D"
+                        }
+                        else {
+                            expectedPos[key] = "B"
+                        }
+                    }
+                }
+            })
+        }
 
-
-
+        // code to check if movement was correct
         if (expectedPos[location.state.selectedRole] === value) {
+            if (movementNumber === 3) {
+                alert("passed!")
+                let consecutiveClearsPlus = consecutiveClears + 1
+                setConsecutiveClears(consecutiveClearsPlus)
+            }
             setPosTaken(expectedPos) 
             setGroupStatus(ExpectedGroupStatus)
             let movementNumberPlus = movementNumber + 1
-            setMovementNumber(movementNumberPlus++)
+            setMovementNumber(movementNumberPlus)
             return
         }
         else {
